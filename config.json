@@ -3,6 +3,8 @@
         "selected_lang" : "default"
     },
     "general": {
-        "download_path": "default"
+        "download_path": "default",
+        "format": "mp4",
+        "bitrate": "120"
     }
 }
