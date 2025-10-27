@@ -2,7 +2,7 @@
 #
 # DM Youtube2MP3 – YouTube to MP3 downloader
 #
-# Copyright (C) 2025  Darko MILOŠEVIĆ <daremc86@gmail.com>
+# Copyright (C) 2025-2026  Darko MILOŠEVIĆ <daremc86@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ class SettingsDialog(wx.Dialog):
         # Language
         label_language = wx.StaticText(panel, label=_["Language:"])
         self.language_choice = wx.Choice(panel, choices=languages.get_language_names())
-        self.language_choice.SetSelection(0)
+        self.language_choice.SetSelection(language_codes.index(config["lang"]["selected_lang"]))
         vbox.Add(label_language, flag=wx.Left | wx.Top, border=10)
         vbox.Add(self.language_choice, flag=wx.EXPAND | wx.Left | wx.Right, border=10)
 
