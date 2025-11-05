@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# DM Youtube2MP3 – YouTube to MP3 downloader
+# DM Downloader
 #
 # Copyright (C) 2025-2026  Darko MILOŠEVIĆ <daremc86@gmail.com>
 #
@@ -34,15 +34,15 @@ from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 # Set download path and config path
 USERNAME = getpass.getuser()
-HISTORY_FILE = os.path.join(os.getenv('APPDATA'), 'DMYoutube2MP3', "history.json")
-config_path = os.path.join(os.getenv('APPDATA'), 'DMYoutube2MP3', 'config.json')
+HISTORY_FILE = os.path.join(os.getenv('APPDATA'), 'DMDownloader', "history.json")
+config_path = os.path.join(os.getenv('APPDATA'), 'DMDownloader', 'config.json')
 os.makedirs(os.path.dirname(HISTORY_FILE), exist_ok=True)
 if not os.path.exists(config_path):
     shutil.copy2(os.path.join(os.getcwd(), 'config.json'), config_path)
 with open(config_path, 'r', encoding='utf-8') as file:
     config = json.load(file)
 if config["general"]["download_path"] == "default":
-    DOWNLOAD_FOLDER = Path(f"C:/Users/{USERNAME}/Downloads/DM Youtube2mp3")
+    DOWNLOAD_FOLDER = Path(f"C:/Users/{USERNAME}/Downloads/DM Downloader")
 else:
     DOWNLOAD_FOLDER = Path(f"{config['general']['download_path']}")
 DOWNLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
@@ -106,7 +106,7 @@ def normalize_youtube_url(url):
 # Download and convert to MP3
 def download_with_ytdlp(url, progress_callback=None, status_callback=None):
     try:
-        send_notification("DM Youtube2MP3", _["Download started..."], parent=None)
+        send_notification("DM Downloader", _["Download started..."], parent=None)
 
         clean_url, is_playlist = normalize_youtube_url(url)
 
@@ -150,7 +150,7 @@ def download_with_ytdlp(url, progress_callback=None, status_callback=None):
                 mp3_path = DOWNLOAD_FOLDER / f"{title}.mp3"
                 save_to_history(title, str(mp3_path))
 
-        wx.CallAfter(send_notification, "DM Youtube2MP3", f"{_['Download finished']}: {title}", wx.GetTopLevelWindows()[0])
+        wx.CallAfter(send_notification, "DM Downloader", f"{_['Download finished']}: {title}", wx.GetTopLevelWindows()[0])
         if status_callback:
             status_callback(f"{_['Finished:']} {info.get('title', 'Multiple')}")
     except Exception as e:
@@ -161,7 +161,7 @@ def download_with_ytdlp(url, progress_callback=None, status_callback=None):
 # GUI application
 class MyFrame(wx.Frame):
     def __init__(self):
-        super().__init__(parent=None, title="DM Youtube2MP3", size=(600, 400))
+        super().__init__(parent=None, title="DM Downloader", size=(600, 400))
         panel = wx.Panel(self)
         self.Bind(wx.EVT_CLOSE, self.on_close)
         vbox = wx.BoxSizer(wx.VERTICAL)

@@ -1,4 +1,4 @@
-# Contributing to DMYoutube2MP3
+# Contributing to DMDownloader
 
 ## How to contribute
 

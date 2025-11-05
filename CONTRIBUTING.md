@@ -1,6 +1,6 @@
-# Contributing to DM Youtube2MP3
+# Contributing to DM Downloader
 
-Thank you for your interest in contributing to DM Youtube2MP3! Contributions are welcome and appreciated. Whether you're fixing bugs, suggesting improvements, or adding new features, your help is valuable.
+Thank you for your interest in contributing to DM Downloader! Contributions are welcome and appreciated. Whether you're fixing bugs, suggesting improvements, or adding new features, your help is valuable.
 
 ---
 
