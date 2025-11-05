@@ -2,11 +2,11 @@
 
 ## Windows
 
-1. Download the latest `.exe` installer from [releases](https://github.com/DarkoMilosevic86/DMYoutube2MP3/releases)
+1. Download the latest `.exe` installer from [releases](https://github.com/DarkoMilosevic86/DMDownloader/releases)
 2. Run the installer as administrator
 3. The application will be installed in:
-   - `C:\Program Files\DMYoutube2MP3`
-   - Configuration is saved in: `%APPDATA%\DMYoutube2MP3\config.json`
+   - `C:\Program Files\DMDownloader`
+   - Configuration is saved in: `%APPDATA%\DMDownloader\config.json`
 
 ## Notes
 

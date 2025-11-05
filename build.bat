@@ -1,13 +1,13 @@
 @echo off
 setlocal enabledelayedexpansion
 
-title DMYoutube2MP3 builder
+title DMDownloader builder
 
-echo Welcome to the DMYoutube2MP3 builder!
+echo Welcome to the DMDownloader builder!
 echo.
 set VENV_DIR=.venv
-set MAIN_SCRIPT=DMYoutube2MP3.py
-set DIST_NAME=DMYoutube2MP3
+set MAIN_SCRIPT=DMDownloader.py
+set DIST_NAME=DMDownloader
 set FFMPEG_FILE=ffmpeg.exe
 
 echo ----------------------------------------
@@ -36,7 +36,7 @@ echo [3] Building using PyInstaller...
 echo ----------------------------------------
 
 pyinstaller --noconfirm --noconsole --name %DIST_NAME% ^
- --add-data "%FFMPEG_FILE%;." --icon="res/DMYoutube2MP3.ico" ^
+ --add-data "%FFMPEG_FILE%;." --icon="res/DMDownloader.ico" ^
  --version-file="res/version_info.txt" ^
  %MAIN_SCRIPT%
 

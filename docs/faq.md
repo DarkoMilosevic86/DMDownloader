@@ -12,5 +12,5 @@
 
 ## ❓ Where is the config saved?
 
-- `%APPDATA%\DMYoutube2MP3\config.json`
+- `%APPDATA%\DMDownloader\config.json`
 - Existing config is not overwritten by the installer.

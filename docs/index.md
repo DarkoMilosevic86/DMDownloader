@@ -1,13 +1,13 @@
-# DMYoutube2MP3
+# DMDownloader
 
-**DMYoutube2MP3** is a simple GUI tool for converting YouTube videos to MP3, with support for multiple languages, background downloading, and local download history.
+**DMDownloader** is a simple GUI tool for downloading YouTube and Dailymotion videos to a different formats, with support for multiple languages, background downloading, and local download history.
 
 - ✅ Clipboard monitoring
 - ✅ Download notifications
-- ✅ Playlist support (coming soon)
+- ✅ Playlist support
 - ✅ Multi-language support
 - ✅ GUI configuration
 
-> Version: 1.0.0  
+> Version: 2.0.0  
 > Author: Darko Milošević  
 > License: GPLv3

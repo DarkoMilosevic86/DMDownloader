@@ -3,13 +3,13 @@
 ## Quick download
 
 1. Open the app
-2. Paste a YouTube link or click "Paste from Clipboard"
+2. Paste a YouTube, ор Dailymotion link or click "Paste from Clipboard"
 3. Click "Download"
 
 ## Download history
 
 - Displays all completed downloads
-- Click "Show in Folder" from the context menu to open the MP3 file location. Also you can use left mouse button on the selected item, or press Enter on the keyboard to show the selected item in folder.
+- Click "Show in Folder" from the context menu to open the file location. Also you can use left mouse button on the selected item, or press Enter on the keyboard to show the selected item in folder.
 - You can delete items by clicking "Delete" from the context menu, or press Del on the keyboard.
 
 ## Notifications
@@ -18,7 +18,7 @@
 
 ## Settings
 
-You can set your prefered language from the Settings dialog.
+You can set your prefered language, file format and bitrate from the Settings dialog.
 When you run the app for the first time, the app will be displayed using your system locale language.
 If the app does not supports your system locale language, the app will display using English language.
 

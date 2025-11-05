@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #
-# DM Youtube2MP3 – YouTube to MP3 downloader
+# DM Downloader
 #
-# Copyright (C) 2025  Darko MILOŠEVIĆ <daremc86@gmail.com>
+# Copyright (C) 2025-2026  Darko MILOŠEVIĆ <daremc86@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ import languages
 from wx import DirDialog
 
 # Configuration path
-CONFIG_PATH = os.path.join(os.getenv('APPDATA'), 'DMYoutube2MP3', 'config.json')
+CONFIG_PATH = os.path.join(os.getenv('APPDATA'), 'DMDownloader', 'config.json')
 # Language display names and language codes lists
 language_list = languages.get_language_names()
 language_codes = languages.list_languages()
