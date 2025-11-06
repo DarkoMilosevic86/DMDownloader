@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+    # -*- coding: utf-8 -*-
 #
 # DM Downloader
 #
@@ -127,7 +127,7 @@ def download_with_ytdlp(url, progress_callback=None, status_callback=None):
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
-                'preferredquality': '192',
+                'preferredquality': config["general"]["bitrate"],
             }],
             'quiet': True,
             'ignoreerrors': True,
@@ -211,7 +211,7 @@ class MyFrame(wx.Frame):
 
     def on_paste(self, event):
         url = pyperclip.paste()
-        if "youtube.com/watch" in url or "youtu.be" in url:
+        if "youtube.com/watch" in url or "youtu.be" in url or "dailymotion" in url:
             self.url_ctrl.SetValue(url)
         else:
             self.status.SetLabel(_["Clipboard does not contains a valid YouTube link."])
@@ -243,7 +243,7 @@ class MyFrame(wx.Frame):
 
     def on_text_changed(self, event):
         url = self.url_ctrl.GetValue().strip()
-        if url.__contains__('https://youtube.com/watch?') or url.__contains__('https://www.youtube.com/watch?'):
+        if url.__contains__('https://youtube.com/watch?') or url.__contains__('https://www.youtube.com/watch?') or url.__contains__("dailymotion"):
             self.download_btn.Enable(bool(url))
 
     def on_context_menu(self, event):

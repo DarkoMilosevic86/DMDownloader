@@ -54,7 +54,10 @@ class SettingsDialog(wx.Dialog):
         # Language
         label_language = wx.StaticText(panel, label=_["Language:"])
         self.language_choice = wx.Choice(panel, choices=languages.get_language_names())
-        self.language_choice.SetSelection(language_codes.index(config["lang"]["selected_lang"]))
+        if config["lang"]["selected_lang"] == "default":
+            self.language_choice.SetSelection(language_codes.index(languages.DEFAULT_LANG))
+        else:
+            self.language_choice.SetSelection(language_codes.index(config["lang"]["selected_lang"]))
         vbox.Add(label_language, flag=wx.Left | wx.Top, border=10)
         vbox.Add(self.language_choice, flag=wx.EXPAND | wx.Left | wx.Right, border=10)
 
