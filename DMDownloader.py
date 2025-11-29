@@ -103,14 +103,14 @@ def normalize_youtube_url(url):
 
     return (clean_url, is_playlist)
 
-# Download and convert to MP3
+# Download and convert
 def download_with_ytdlp(url, progress_callback=None, status_callback=None):
     try:
         send_notification("DM Downloader", _["Download started..."], parent=None)
 
         clean_url, is_playlist = normalize_youtube_url(url)
 
-        # progress_hook funkcija
+        # progress_hook function
         def progress_hook(d):
             if d['status'] == 'downloading':
                 if 'total_bytes' in d and d['total_bytes'] > 0:
@@ -120,19 +120,47 @@ def download_with_ytdlp(url, progress_callback=None, status_callback=None):
             elif d['status'] == 'finished':
                 wx.CallAfter(progress_callback, 100)
 
+        user_format = config["general"]["format"].lower()
+        user_bitrate = config["general"]["bitrate"]
+
+        # ---------------------------
+        # Format logic
+        # ---------------------------
+        if user_format == "mp4":
+            ytdl_format = "bestvideo*+bestaudio/best"
+            postprocessors = [{
+                'key': 'FFmpegVideoConvertor',
+                'preferedformat': 'mp4'
+            }]
+        elif user_format == "m4a":
+            ytdl_format = "bestaudio/best"
+            postprocessors = [
+                {'key': 'FFmpegExtractAudio', 'preferredcodec': 'm4a'},
+                {'key': 'EmbedThumbnail'}, 
+                {'key': 'FFmpegMetadata'}
+            ]
+        else:
+            ytdl_format = "bestaudio/best"
+            postprocessors = [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': user_format,
+                'preferredquality': user_bitrate,
+            }]
+
+        # ---------------------------
+        # YT-DLP options
+        # ---------------------------
         ydl_opts = {
-            'format': 'bestaudio/best',
+            'format': ytdl_format,
             'outtmpl': str(DOWNLOAD_FOLDER / '%(title)s.%(ext)s'),
             'progress_hooks': [progress_hook],
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': config["general"]["bitrate"],
-            }],
+            'postprocessors': postprocessors,
             'quiet': True,
             'ignoreerrors': True,
             'noplaylist': not is_playlist,
             'ffmpeg_location': str(Path(__file__).parent),
+            'writethumbnail': True,
+            'embedthumbnail': True,
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -143,12 +171,12 @@ def download_with_ytdlp(url, progress_callback=None, status_callback=None):
                     if entry is None:
                         continue
                     title = entry.get('title', 'Unknown title')
-                    mp3_path = DOWNLOAD_FOLDER / f"{title}.mp3"
-                    save_to_history(title, str(mp3_path))
+                    out_file = DOWNLOAD_FOLDER / f"{title}.{user_format}"
+                    save_to_history(title, str(out_file))
             else:
                 title = info.get('title', 'Unknown title')
-                mp3_path = DOWNLOAD_FOLDER / f"{title}.mp3"
-                save_to_history(title, str(mp3_path))
+                out_file = DOWNLOAD_FOLDER / f"{title}.{user_format}"
+                save_to_history(title, str(out_file))
 
         wx.CallAfter(send_notification, "DM Downloader", f"{_['Download finished']}: {title}", wx.GetTopLevelWindows()[0])
         if status_callback:
