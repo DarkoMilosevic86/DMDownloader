@@ -25,5 +25,7 @@
     "Cancel": "Annulla",
     "Select download folder": "Seleziona cartella di download",
     "Settings saved. Restart app to apply changes.": "Impostazioni salvate. Riavvia l'app per applicare le modifiche.",
-    "Info": "Informazioni"
+    "Info": "Informazioni",
+    "File format:": "Formato del file:",
+    "Quality:": "Qualità:"
 }

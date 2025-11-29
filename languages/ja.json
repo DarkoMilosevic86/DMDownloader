@@ -25,6 +25,8 @@
     "Cancel": "キャンセル",
     "Select download folder": "ダウンロードフォルダーを選択",
     "Settings saved. Restart app to apply changes.": "設定を保存しました。変更を適用するにはアプリを再起動してください。",
-    "Info": "情報"
+    "Info": "情報",
+    "File format:": "ファイル形式：",
+    "Quality:": "品質："
   }
   
