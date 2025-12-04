@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# DM Youtube2MP3 – YouTube to MP3 downloader
+# DM Downloader
 #
 # Copyright (C) 2025  Darko MILOŠEVIĆ <daremc86@gmail.com>
 #
@@ -25,7 +25,7 @@ from babel import Locale
 
 LANG_FOLDER = os.path.join(os.path.dirname(__file__), 'languages')
 DEFAULT_LANG = 'en'
-CONFIG_PATH = os.path.join(os.getenv('APPDATA'), 'DMYoutube2MP3', 'config.json')
+CONFIG_PATH = os.path.join(os.getenv('APPDATA'), 'DMDownloader', 'config.json')
 
 def list_languages():
     """Returns list of available language codes from the languages folder."""

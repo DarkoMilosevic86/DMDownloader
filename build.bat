@@ -6,6 +6,7 @@ title DMDownloader builder
 echo Welcome to the DMDownloader builder!
 echo.
 set VENV_DIR=.venv
+set Inno_Setup_Compiler_Dir="C:\Program Files (x86)\Inno Setup 6"
 set MAIN_SCRIPT=DMDownloader.py
 set DIST_NAME=DMDownloader
 set FFMPEG_FILE=ffmpeg.exe
@@ -44,4 +45,7 @@ echo ----------------------------------------
 echo [4] Finished!
 echo ----------------------------------------
 call %VENV_DIR%\Scripts\deactivate.bat
+echo [5] Building Installer
+echo ----------------------------------------
+call %Inno_Setup_Compiler_Dir%\iscc.exe DMDownloader.iss
 pause

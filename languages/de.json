@@ -25,5 +25,7 @@
     "Cancel": "Abbrechen",
     "Select download folder": "Download-Ordner auswählen",
     "Settings saved. Restart app to apply changes.": "Einstellungen gespeichert. Bitte Anwendung neu starten, um Änderungen zu übernehmen.",
-    "Info": "Information"
+    "Info": "Information",
+    "File format:": "Dateiformat:",
+    "Quality:": "Qualität:"
 }

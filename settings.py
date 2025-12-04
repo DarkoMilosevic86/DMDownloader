@@ -29,7 +29,10 @@ CONFIG_PATH = os.path.join(os.getenv('APPDATA'), 'DMDownloader', 'config.json')
 # Language display names and language codes lists
 language_list = languages.get_language_names()
 language_codes = languages.list_languages()
-
+# Formats
+format_list = ["mp4", "m4a", "flac", "ogg", "mp3", "wav"]
+# Bitrates
+bitrate_list = ["128", "192", "320"]
 # Translations
 _ = languages.load_translations()
 
@@ -54,9 +57,25 @@ class SettingsDialog(wx.Dialog):
         # Language
         label_language = wx.StaticText(panel, label=_["Language:"])
         self.language_choice = wx.Choice(panel, choices=languages.get_language_names())
-        self.language_choice.SetSelection(language_codes.index(config["lang"]["selected_lang"]))
+        if config["lang"]["selected_lang"] == "default":
+            self.language_choice.SetSelection(language_codes.index(languages.DEFAULT_LANG))
+        else:
+            self.language_choice.SetSelection(language_codes.index(config["lang"]["selected_lang"]))
         vbox.Add(label_language, flag=wx.Left | wx.Top, border=10)
         vbox.Add(self.language_choice, flag=wx.EXPAND | wx.Left | wx.Right, border=10)
+    # Format list box
+        label_format = wx.StaticText(panel, label=_["File format:"])
+        self.format_choice = wx.Choice(panel, choices=format_list)
+        self.format_choice.SetSelection(format_list.index(config["general"]["format"]))
+        vbox.Add(label_format, flag=wx.Left | wx.Top, border=10)
+        vbox.Add(self.format_choice, flag=wx.EXPAND | wx.Left | wx.Right, border=10)
+    # Bitrate list box
+        label_bitrate = wx.StaticText(panel, label=_["Quality:"])
+        self.bitrate_choice = wx.Choice(panel, choices=bitrate_list)
+        self.bitrate_choice.SetSelection(bitrate_list.index(config["general"]["bitrate"]))
+        vbox.Add(label_bitrate, flag=wx.Left | wx.Top, border=10)
+        vbox.Add(self.bitrate_choice, flag=wx.EXPAND | wx.Left | wx.Right, border=10)
+
 
         # Download folder
         folder_label = wx.StaticText(panel, label=_["Download folder:"])
@@ -91,8 +110,12 @@ class SettingsDialog(wx.Dialog):
     # Save settings event
     def on_save(self, event):
         language_code = language_codes[self.language_choice.GetSelection()]
+        format_value = self.format_choice.GetStringSelection()
+        bitrate_value = self.bitrate_choice.GetStringSelection()
         config = load_config()
         config["lang"]["selected_lang"] = language_code
+        config["general"]["format"] = format_value
+        config["general"]["bitrate"] = bitrate_value
         config["general"]["download_path"] = self.folder_ctrl.GetValue()
         save_config(config)
         wx.MessageBox(_["Settings saved. Restart app to apply changes."], _["Info"], wx.OK | wx.ICON_INFORMATION)

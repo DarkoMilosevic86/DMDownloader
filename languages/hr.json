@@ -25,5 +25,7 @@
     "Cancel": "Odustani",
     "Select download folder": "Odaberite mapu za preuzimanja",
     "Settings saved. Restart app to apply changes.": "Postavke pohranjene. Morate ponovno pokrenuti aplikaciju kako bi promjene stupile na snagu.",
-    "Info": "Info"
+    "Info": "Info",
+    "File format:": "Format datoteke",
+    "Quality:": "Kvaliteta:"
 }

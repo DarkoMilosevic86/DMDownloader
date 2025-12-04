@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.0.0] – 2025-12-04
+### Fixed
+- Language sellection
+- Documentation
+### Changed
+- Changed program name to DMDownloader
+- Changed configuration and history paths
+- - Added Dailymotion support
+- Added formats:MP4, M4A, OGG, FLAC and WAVE
+- Added audio quality
+- Installation has been migrated from the NSIS to the Inno Setup
+- Added configuration files for each language. When you install for example: German, program will display in German
+
+---
+
 ## [1.1.2] – 2025-10-25
 ### Fixed
 - Recognizing YouTube links

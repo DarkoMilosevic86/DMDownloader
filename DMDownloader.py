@@ -103,60 +103,155 @@ def normalize_youtube_url(url):
 
     return (clean_url, is_playlist)
 
-# Download and convert to MP3
+
+# Detect platform (youtube/dailymotion/unknown)
+def detect_platform(url: str):
+    u = url.lower()
+    if "youtube.com" in u or "youtu.be" in u:
+        return "youtube"
+    if "dailymotion.com" in u or "dai.ly" in u:
+        return "dailymotion"
+    return "unknown"
+
+
+# Sanitize filename helper (basic)
+def sanitize_filename(name: str):
+    # remove control characters and reserved Windows characters
+    invalid = '<>:"/\\|?*\n\r\t'
+    for c in invalid:
+        name = name.replace(c, '')
+    # trim whitespace
+    return name.strip()[:200]
+
+
+# Download and convert
 def download_with_ytdlp(url, progress_callback=None, status_callback=None):
     try:
         send_notification("DM Downloader", _["Download started..."], parent=None)
 
-        clean_url, is_playlist = normalize_youtube_url(url)
+        platform = detect_platform(url)
 
-        # progress_hook funkcija
+        # For YouTube we normalize and detect playlists; for others pass through
+        if platform == "youtube":
+            clean_url, is_playlist = normalize_youtube_url(url)
+        else:
+            clean_url = url
+            # Let yt-dlp decide if it's a playlist; setting noplaylist accordingly later
+            is_playlist = None
+
+        # progress_hook function
         def progress_hook(d):
-            if d['status'] == 'downloading':
-                if 'total_bytes' in d and d['total_bytes'] > 0:
-                    percent = d.get('downloaded_bytes', 0) / d['total_bytes'] * 100
-                    wx.CallAfter(progress_callback, percent)
-                    wx.CallAfter(status_callback, f"{_['Download in progress...']} {percent:.1f}%")
-            elif d['status'] == 'finished':
-                wx.CallAfter(progress_callback, 100)
+            try:
+                status = d.get('status')
+                if status == 'downloading':
+                    total = d.get('total_bytes') or d.get('total_bytes_estimate') or 0
+                    downloaded = d.get('downloaded_bytes', 0)
+                    if total:
+                        percent = downloaded / total * 100
+                        if progress_callback:
+                            wx.CallAfter(progress_callback, percent)
+                        if status_callback:
+                            wx.CallAfter(status_callback, f"{_['Download in progress...']} {percent:.1f}%")
+                elif status == 'finished':
+                    if progress_callback:
+                        wx.CallAfter(progress_callback, 100)
+            except Exception:
+                pass
+
+        user_format = config["general"].get("format", "mp3").lower()
+        user_bitrate = config["general"].get("bitrate", "192")
+
+        # Decide ytdl format and postprocessors based on chosen format
+        if user_format == "mp4":
+            # download best video + best audio and merge to mp4
+            ytdl_format = "bestvideo+bestaudio/best"
+            postprocessors = []
+            merge_output_format = "mp4"
+        elif user_format == "m4a":
+            ytdl_format = "bestaudio/best"
+            postprocessors = [
+                {'key': 'FFmpegExtractAudio', 'preferredcodec': 'm4a', 'preferredquality': user_bitrate},
+                {'key': 'EmbedThumbnail'},
+                {'key': 'FFmpegMetadata'},
+            ]
+            merge_output_format = None
+        else:
+            # other audio codecs (mp3, flac, ogg, wav)
+            ytdl_format = "bestaudio/best"
+            postprocessors = [
+                {'key': 'FFmpegExtractAudio', 'preferredcodec': user_format, 'preferredquality': user_bitrate},
+                {'key': 'EmbedThumbnail'},
+                {'key': 'FFmpegMetadata'},
+            ]
+            merge_output_format = None
+
+        # Ensure ffmpeg location points to the script folder (where you bundle ffmpeg)
+        ffmpeg_location = str(Path(__file__).parent)
+
+        # Output template (sanitize title later if needed)
+        outtmpl = str(DOWNLOAD_FOLDER / '%(title)s.%(ext)s')
 
         ydl_opts = {
-            'format': 'bestaudio/best',
-            'outtmpl': str(DOWNLOAD_FOLDER / '%(title)s.%(ext)s'),
+            'format': ytdl_format,
+            'outtmpl': outtmpl,
             'progress_hooks': [progress_hook],
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-            }],
+            'postprocessors': postprocessors,
             'quiet': True,
             'ignoreerrors': True,
-            'noplaylist': not is_playlist,
-            'ffmpeg_location': str(Path(__file__).parent),
+            # if is_playlist is None (non-YouTube) don't force noplaylist
+            'noplaylist': (False if is_playlist is None else (not is_playlist)),
+            'ffmpeg_location': ffmpeg_location,
+            'writethumbnail': True,
+            'embedthumbnail': True,
         }
+
+        if merge_output_format:
+            ydl_opts['merge_output_format'] = merge_output_format
+
+        # Create download folder if missing
+        DOWNLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(clean_url, download=True)
 
-            if 'entries' in info:
-                for entry in info['entries']:
+            # Save history depending on entries (playlists) or single
+            if isinstance(info, dict) and 'entries' in info:
+                for entry in info['entries'] or []:
                     if entry is None:
                         continue
-                    title = entry.get('title', 'Unknown title')
-                    mp3_path = DOWNLOAD_FOLDER / f"{title}.mp3"
-                    save_to_history(title, str(mp3_path))
-            else:
+                    title = entry.get('title') or entry.get('id') or 'Unknown title'
+                    safe_title = sanitize_filename(title)
+                    ext = 'mp4' if user_format == 'mp4' else user_format
+                    out_file = DOWNLOAD_FOLDER / f"{safe_title}.{ext}"
+                    save_to_history(title, str(out_file))
+            elif isinstance(info, dict):
                 title = info.get('title', 'Unknown title')
-                mp3_path = DOWNLOAD_FOLDER / f"{title}.mp3"
-                save_to_history(title, str(mp3_path))
+                safe_title = sanitize_filename(title)
+                ext = 'mp4' if user_format == 'mp4' else user_format
+                out_file = DOWNLOAD_FOLDER / f"{safe_title}.{ext}"
+                save_to_history(title, str(out_file))
+            else:
+                # fallback
+                pass
+
+        # Cleanup unwanted leftover files (.webm, .webp, thumbnails, temp files)
+        for fname in os.listdir(DOWNLOAD_FOLDER):
+            low = fname.lower()
+            if low.endswith(('.webm', '.webp', '.part', '.tmp', '.temp')) or low.endswith(('.jpg', '.jpeg', '.png')) and user_format != 'mp4':
+                file_path = DOWNLOAD_FOLDER / fname
+                try:
+                    file_path.unlink()
+                except Exception:
+                    pass
 
         wx.CallAfter(send_notification, "DM Downloader", f"{_['Download finished']}: {title}", wx.GetTopLevelWindows()[0])
         if status_callback:
-            status_callback(f"{_['Finished:']} {info.get('title', 'Multiple')}")
+            status_callback(f"{_['Finished:']} {info.get('title', 'Multiple') if isinstance(info, dict) else 'Multiple'}")
     except Exception as e:
         send_notification(_["Download Error"], f"{_['Unsuccessfull']}: {str(e)}")
         if status_callback:
             status_callback(f"{_['Download Error']} {str(e)}")
+
 
 # GUI application
 class MyFrame(wx.Frame):
@@ -211,7 +306,7 @@ class MyFrame(wx.Frame):
 
     def on_paste(self, event):
         url = pyperclip.paste()
-        if "youtube.com/watch" in url or "youtu.be" in url:
+        if any(s in url for s in ("youtube.com/watch", "youtu.be", "dailymotion", "dai.ly")):
             self.url_ctrl.SetValue(url)
         else:
             self.status.SetLabel(_["Clipboard does not contains a valid YouTube link."])
@@ -243,8 +338,8 @@ class MyFrame(wx.Frame):
 
     def on_text_changed(self, event):
         url = self.url_ctrl.GetValue().strip()
-        if url.__contains__('https://youtube.com/watch?') or url.__contains__('https://www.youtube.com/watch?'):
-            self.download_btn.Enable(bool(url))
+        platform = detect_platform(url)
+        self.download_btn.Enable(platform in ("youtube", "dailymotion"))
 
     def on_context_menu(self, event):
         selection = self.history_list.GetSelection()

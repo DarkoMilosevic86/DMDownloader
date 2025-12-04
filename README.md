@@ -42,8 +42,11 @@ cd DMDownloader
 - To build the source code, make sure Python 3.10+ is installed on your computer.
 - Run `build.bat` to build the DMDownloader from source.
 #### Important note!
-To build the DMDownloader from the source code, you must download ffmpeg binary and copy the file ffmpeg.exe to the main repository folder
-
+To build the DMDownloader from the source code, you must download ffmpeg binary and copy the file ffmpeg.exe to the main repository folder.
+Also, you have to download and install the Inno Setup to build the installer from the following link:
+[https://jrsoftware.org/isdl.php](https://jrsoftware.org/isdl.php)
+After you download and install the Inno Setup, you have to download translations file for SerbianLatin and Croatian language because they aren't included in the installation and should to be downloaded separately.
+You can download translation files from [here](https://jrsoftware.org/files/istrans/)
 ## 🤝 Contributing
 
 We welcome contributions to DM Downloader! If you'd like to report a bug, suggest a feature, or contribute code, please check out our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
