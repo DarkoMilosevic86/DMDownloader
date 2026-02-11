@@ -1,14 +1,14 @@
 ; DMDownloader installation program
-; (C) 2025-2026  Darko MILOŠEVIĆ <daremc86@gmail.com>
+; (C) 2026-2027  Darko MILOŠEVIĆ <daremc86@gmail.com>
 ; GPL v3 License
 
 [Setup]
 AppName=DM Downloader
-AppVersion=2.0
-AppCopyright=Copyright (C) 2025-2026 Darko Milošević <daremc86@gmail.com>
+AppVersion=2.0.1
+AppCopyright=Copyright (C) 2026-2027 Darko Milošević <daremc86@gmail.com>
 AppPublisher=Darko Milošević
 AppPublisherURL=https://github.com/daremc86/DMDownloader
-OutputBaseFilename=DM Downloader 2.0
+OutputBaseFilename=DM Downloader 2.0.1
 DefaultDirName={autopf}\DM Downloader
 DefaultGroupName=DM Downloader
 UninstallDisplayIcon={app}\DMDownloader.exe
@@ -19,7 +19,7 @@ OutputDir=Dist
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 LicenseFile=LICENSE
-VersionInfoVersion=2.0.0.0
+VersionInfoVersion=2.0.1.0
 ; multilang installer
 ShowLanguageDialog=yes
 

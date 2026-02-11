@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.0.1] – 2026-02-11
+### Updated
+- Python version to 12
+- DMDownloader dependencies
+
 ## [2.0.0] – 2025-12-04
 ### Fixed
 - Language sellection
